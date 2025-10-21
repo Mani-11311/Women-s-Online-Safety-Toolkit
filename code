@@ -1,0 +1,946 @@
+# Codes for the project
+from IPython.display import display, HTML
+import random
+
+html_content = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women's Online Safety Toolkit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #8A2BE2;
+            --secondary: #FF1493;
+            --accent: #00BFFF;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --success: #2ECC71;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #F8F9FA;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.5));
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .intro h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #E6E6E6;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .privacy-header {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+        }
+
+        .stalking-header {
+            background: linear-gradient(135deg, var(--warning), var(--danger));
+        }
+
+        .harassment-header {
+            background: linear-gradient(135deg, var(--primary), #6A0DAD);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .card-content h3 {
+            margin-bottom: 1.2rem;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+
+        .card-content ul {
+            list-style-type: none;
+        }
+
+        .card-content li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            color: #E6E6E6;
+        }
+
+        .card-content li i {
+            color: var(--primary);
+            margin-right: 12px;
+            margin-top: 4px;
+            font-size: 1.2rem;
+        }
+
+        .tool-demo {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: white;
+        }
+
+        .demo-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .demo-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .demo-box {
+            flex: 1;
+            min-width: 320px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-box h4 {
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            font-size: 1.6rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: #E6E6E6;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #F8F9FA;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(138, 43, 226, 0.3);
+        }
+
+        .input-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+            color: #E6E6E6;
+            animation: fadeIn 0.5s ease;
+            word-break: break-word; /* Prevent overflow */
+        }
+
+        .result p {
+            margin-bottom: 0.8rem;
+        }
+
+        .result p:last-child {
+            margin-bottom: 0;
+        }
+
+        .result strong {
+            color: white;
+        }
+
+        .result span {
+            font-weight: 600;
+        }
+
+        .result .risk-high {
+            color: var(--danger);
+        }
+
+        .result .risk-medium {
+            color: var(--warning);
+        }
+
+        .result .risk-low {
+            color: var(--success);
+        }
+
+        .result .risk-uncertain {
+             color: var(--accent);
+        }
+
+
+        .statistics {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #fff;
+        }
+
+        .stats-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 1.8rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #6a11cb;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 0 10px rgba(106, 17, 203, 0.4);
+        }
+
+        .stat-card p {
+            color: #e6e6e6;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background: rgba(26, 26, 46, 0.95);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ff4d94, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-content > p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #e6e6e6;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-links a:hover {
+            color: #2ecc71;
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a6a6c6;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .tools-grid, .resources-grid, .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <i class="fas fa-shield-alt logo"></i>
+                <h1>Women's Online Safety Toolkit</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="tools"><i class="fas fa-tools"></i> Tools</a></li>
+                    <li><a href="#" class="nav-link" data-page="resources"><i class="fas fa-book"></i> Resources</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="intro">
+                <h2>Protecting Women in Digital Spaces</h2>
+                <p>In today's interconnected world, women face unique challenges to their safety and privacy online. Our toolkit provides essential resources to help protect against privacy breaches, stalking, and harassment. Explore the tools below to take control of your digital safety.</p>
+            </section>
+
+            <section class="tools-grid">
+                <div class="tool-card">
+                    <div class="card-header privacy-header">
+                        <i class="fas fa-user-lock card-icon"></i>
+                        <h2>Privacy Protection</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Secure Your Digital Presence</h3>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Social media privacy audit</li>
+                            <li><i class="fas fa-search"></i> <strong>Data Removal Guide:</strong> Step-by-step instructions to remove personal information from data brokers</li>
+                            <li><i class="fas fa-lock"></i> <strong>Password Manager:</strong> Secure storage and generation of strong passwords</li>
+                            <li><i class="fas fa-incognito"></i> <strong>Browser Extension:</strong> Real-time privacy protection while browsing</li>
+                            <li><i class="fas fa-mobile-alt"></i> <strong>App Permissions Audit:</strong> Review and manage app permissions on your devices</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="card-header stalking-header">
+                        <i class="fas fa-binoculars card-icon"></i>
+                        <h2>Stalking Defense</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Identify and Prevent Stalking</h3>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt"></i> <strong>Location Privacy:</strong> Control who can see your location data</li>
+                            <li><i class="fas fa-clipboard-list"></i> <strong>Digital Footprint Audit:</strong> Discover what information about you is available online</li>
+                            <li><i class="fas fa-bell"></i> <strong>Alert System:</strong> Get notified of potential stalking behavior</li>
+                            <li><i class="fas fa-camera"></i> <strong>Image Monitoring:</strong> Find where your images appear online</li>
+                            <li><i class="fas fa-file-alt"></i> <strong>Incident Logging:</strong> Document and save evidence of stalking behavior</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="card-header harassment-header">
+                        <i class="fas fa-exclamation-triangle card-icon"></i>
+                        <h2>Harassment Detection</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Combat Online Harassment</h3>
+                        <ul>
+                            <li><i class="fas fa-comment-slash"></i> <strong>Message Filter:</strong> Automatically detect and filter abusive messages</li>
+                            <li><i class="fas fa-robot"></i> <strong>AI Assistant:</strong> Get personalized advice for handling harassment situations</li>
+                            <li><i class="fas fa-ban"></i> <strong>Blocklist Manager:</strong> Easily manage blocked accounts across platforms</li>
+                            <li><i class="fas fa-file-export"></i> <strong>Report Generator:</strong> Create detailed reports for law enforcement</li>
+                            <li><i class="fas fa-hands-helping"></i> <strong>Support Resources:</strong> Quick access to counseling and support services</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="intro">
+                    <h2>Why Online Safety Matters</h2>
+                    <p>Understanding the scope of the problem</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">73%</div>
+                        <p>of women have experienced online harassment</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1 in 5</div>
+                        <p>women have faced severe online harassment including stalking and threats</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">57%</div>
+                        <p>of online abuse victims don't know how to respond</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">40%</div>
+                        <p>of women have taken steps to reduce their online presence due to harassment</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tools Page -->
+        <div id="tools" class="page">
+            <section class="intro">
+                <h2>Safety Tools & Resources</h2>
+                <p>Explore our comprehensive set of tools designed to protect women online. From privacy enhancement to harassment prevention, we provide practical solutions for digital safety.</p>
+            </section>
+
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="card-header privacy-header">
+                        <i class="fas fa-user-lock card-icon"></i>
+                        <h2>Privacy Protection Tools</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Secure Your Digital Presence</h3>
+                        <ul>
+                            <li><i class="fas fa-shield-alt"></i> <strong>Privacy Checkup:</strong> Comprehensive analysis of your online privacy settings</li>
+                            <li><i class="fas fa-search"></i> <strong>Data Removal Guide:</strong> Step-by-step instructions to remove personal information from data brokers</li>
+                            <li><i class="fas fa-lock"></i> <strong>Password Manager:</strong> Secure storage and generation of strong passwords</li>
+                            <li><i class="fas fa-incognito"></i> <strong>Browser Extension:</strong> Real-time privacy protection while browsing</li>
+                            <li><i class="fas fa-mobile-alt"></i> <strong>App Permissions Audit:</strong> Review and manage app permissions on your devices</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="card-header stalking-header">
+                        <i class="fas fa-binoculars card-icon"></i>
+                        <h2>Stalking Defense Tools</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Identify and Prevent Stalking</h3>
+                        <ul>
+                            <li><i class="fas fa-map-marker-alt"></i> <strong>Location Privacy:</strong> Control who can see your location data</li>
+                            <li><i class="fas fa-clipboard-list"></i> <strong>Digital Footprint Audit:</strong> Discover what information about you is available online</li>
+                            <li><i class="fas fa-bell"></i> <strong>Alert System:</strong> Get notified of potential stalking behavior</li>
+                            <li><i class="fas fa-camera"></i> <strong>Image Monitoring:</strong> Find where your images appear online</li>
+                            <li><i class="fas fa-file-alt"></i> <strong>Incident Logging:</strong> Document and save evidence of stalking behavior</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="card-header harassment-header">
+                        <i class="fas fa-exclamation-triangle card-icon"></i>
+                        <h2>Harassment Detection Tools</h2>
+                    </div>
+                    <div class="card-content">
+                        <h3>Combat Online Harassment</h3>
+                        <ul>
+                            <li><i class="fas fa-comment-slash"></i> <strong>Message Filter:</strong> Automatically detect and filter abusive messages</li>
+                            <li><i class="fas fa-robot"></i> <strong>AI Assistant:</strong> Get personalized advice for handling harassment situations</li>
+                            <li><i class="fas fa-ban"></i> <strong>Blocklist Manager:</strong> Easily manage blocked accounts across platforms</li>
+                            <li><i class="fas fa-file-export"></i> <strong>Report Generator:</strong> Create detailed reports for law enforcement</li>
+                            <li><i class="fas fa-hands-helping"></i> <strong>Support Resources:</strong> Quick access to counseling and support services</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+             <section class="tool-demo">
+                <div class="demo-header">
+                    <h2>Harassment Detection Demo</h2>
+                    <p>Try our AI-powered harassment detection tool</p>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-box">
+                        <h4>Check Message Content</h4>
+                        <div class="input-group">
+                            <label for="message">Enter a message to analyze:</label>
+                            <textarea id="message" placeholder="Type a message here to check for harassment..."></textarea>
+                        </div>
+                        <button onclick="checkHarassment()">Analyze Message</button>
+                        <div id="harassment-result" class="result">
+                            <p>Results will appear here after analysis.</p>
+                        </div>
+                    </div>
+                     <div class="demo-box">
+                        <h4>Privacy Checker</h4>
+                        <div class="input-group">
+                            <label for="username">Check social media exposure:</label>
+                            <input type="text" id="username" placeholder="Enter your username">
+                        </div>
+                        <button onclick="checkPrivacy()">Check Privacy</button>
+                        <div id="privacy-result" class="result">
+                            <p>Your privacy report will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Resources Page -->
+        <div id="resources" class="page">
+            <section class="intro">
+                <h2>Helpful Resources</h2>
+                <p>Access government-approved resources, helplines, and support services for women facing online safety issues.</p>
+            </section>
+
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h3><i class="fas fa-shield-alt"></i> Government Resources</h3>
+                    <p>Official government agencies and programs dedicated to online safety:</p>
+                    <ul>
+                        <li><i class="fas fa-globe"></i> <strong>Cybercrime.gov</strong> - Report cybercrimes</li>
+                        <li><i class="fas fa-exclamation-circle"></i> <strong>FTC Identity Theft</strong> - Identity theft protection</li>
+                        <li><i class="fas fa-child"></i> <strong>Missing and Exploited Children</strong> - CyberTipline</li>
+                        <li><i class="fas fa-balance-scale"></i> <strong>Department of Justice</strong> - Cyber harassment resources</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card">
+                    <h3><i class="fas fa-phone-alt"></i> Emergency Helplines</h3>
+                    <p>Immediate help for urgent situations:</p>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> <strong>National Domestic Violence Hotline</strong> - 1-800-799-7233</li>
+                        <li><i class="fas fa-life-ring"></i> <strong>Crisis Text Line</strong> - Text HOME to 741741</li>
+                        <li><i class="fas fa-user-shield"></i> <strong>National Sexual Assault Hotline</strong> - 1-800-656-4673</li>
+                        <li><i class="fas fa-info-circle"></i> <strong>Cyber Civil Rights Initiative</strong> - 844-878-2274</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card">
+                    <h3><i class="fas fa-book"></i> Educational Resources</h3>
+                    <p>Learn more about online safety and digital self-defense:</p>
+                    <ul>
+                        <li><i class="fas fa-graduation-cap"></i> <strong>Stop.Think.Connect.</strong> - Cybersecurity awareness campaign</li>
+                        <li><i class="fas fa-lock"></i> <strong>Stay Safe Online</strong> - NCSA's safety resources</li>
+                        <li><i class="fas fa-balance-scale"></i> <strong>Without My Consent</strong> - Legal resources for victims</li>
+                        <li><i class="fas fa-heart"></i> <strong>Love is Respect</strong> - Digital safety in relationships</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <section class="intro">
+                <h2>Contact Us & Get Help</h2>
+                <p>Reach out to government-approved resources and support services for immediate assistance with online safety issues.</p>
+            </section>
+
+            <div class="contact-info">
+                <h2>Government-Approved Emergency Contacts</h2>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fas fa-phone"></i>
+                        <h3>Emergency Hotline</h3>
+                        <p>National Cyber Security Helpline</p>
+                        <p><a href="tel:1-855-355-7233">1-855-355-7233</a></p>
+                        <p>24/7 support for online harassment</p>
+                    </div>
+
+                    <div class="contact-method">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Cybercrime Reporting</h3>
+                        <p>Internet Crime Complaint Center (IC3)</p>
+                        <p><a href="https://www.ic3.gov" target="_blank">www.ic3.gov</a></p>
+                        <p>FBI's official cybercrime reporting portal</p>
+                    </div>
+
+                    <div class="contact-method">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Immediate Danger</h3>
+                        <p>Local Law Enforcement</p>
+                        <p><a href="tel:911">911</a> (US Emergency Number)</p>
+                        <p>Contact for immediate threats to safety</p>
+                    </div>
+
+                    <div class="contact-method">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Legal Assistance</h3>
+                        <p>Cyber Civil Rights Legal Project</p>
+                        <p><a href="https://www.cybercivilrights.org" target="_blank">www.cybercivilrights.org</a></p>
+                        <p>Free legal help for online harassment victims</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="intro">
+                <h2>Additional Support Resources</h2>
+                <p>These government-vetted organizations provide specialized support for women facing online safety issues:</p>
+            </div>
+
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h3><i class="fas fa-female"></i> Women's Safety Organizations</h3>
+                    <ul>
+                        <li><strong>Women's Justice Institute</strong> - Legal support for women</li>
+                        <li><strong>National Network to End Domestic Violence</strong> - SafetyNet project</li>
+                        <li><strong>Women in Cybersecurity</strong> - Professional support network</li>
+                        <li><strong>RAINN</strong> - Sexual violence resources</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card">
+                    <h3><i class="fas fa-globe"></i> International Resources</h3>
+                    <ul>
+                        <li><strong>UN Women</strong> - Global safety initiatives</li>
+                        <li><strong>European Cybercrime Centre</strong> - EU support</li>
+                        <li><strong>UK Revenge Porn Helpline</strong> - 0345 6000 459</li>
+                        <li><strong>Australian eSafety Commissioner</strong> - Online safety resources</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <h3>Women's Online Safety Toolkit</h3>
+            <p>Empowering women to protect themselves in digital spaces</p>
+
+            <div class="footer-links">
+                <a href="#" class="nav-link" data-page="home"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-link" data-page="tools"><i class="fas fa-tools"></i> Tools</a>
+                <a href="#" class="nav-link" data-page="resources"><i class="fas fa-book"></i> Resources</a>
+                <a href="#" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact Us</a>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2023 Women's Online Safety Toolkit. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const targetPage = this.getAttribute('data-page');
+
+                    // Update active navigation link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Show target page, hide others
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                        if (page.id === targetPage) {
+                            page.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Animation for elements
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Animate cards on scroll
+            const cards = document.querySelectorAll('.tool-card, .resource-card, .stat-card');
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+
+       function checkHarassment() {
+    const message = document.getElementById('message').value.trim();
+    const resultDiv = document.getElementById('harassment-result');
+
+    if (!message) {
+        resultDiv.innerHTML = '<p>Please enter a message to analyze.</p>';
+        return;
+    }
+
+    resultDiv.innerHTML = '<p>Analyzing message...</p>';
+
+    // Simple keyword-based mock detection
+    const abusiveKeywords = ['stupid', 'idiot', 'hate', 'kill', 'shut up', 'dumb', 'ugly', 'bitch', 'fool'];
+    const lowerMessage = message.toLowerCase();
+
+    let foundKeywords = abusiveKeywords.filter(word => lowerMessage.includes(word));
+
+    setTimeout(() => {
+        if (foundKeywords.length > 0) {
+            resultDiv.innerHTML = `
+                <p><strong>Risk Level:</strong> <span class="risk-high">High</span></p>
+                <p><strong>Detected abusive words:</strong> ${foundKeywords.join(', ')}</p>
+                <p><strong>Advice:</strong> Consider blocking the sender and reporting the message.</p>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <p><strong>Risk Level:</strong> <span class="risk-low">Low</span></p>
+                <p>No abusive language detected.</p>
+                <p>Stay safe and vigilant.</p>
+            `;
+        }
+    }, 1000);
+}
+
+        function checkPrivacy() {
+            const username = document.getElementById('username').value;
+            const resultDiv = document.getElementById('privacy-result');
+
+            if (!username.trim()) {
+                resultDiv.innerHTML = '<p>Please enter a username to check.</p>';
+                return;
+            }
+
+            // Simulate privacy check results
+            const randomScore = Math.floor(Math.random() * 100);
+            let privacyLevel = 'Good';
+            let color = '#2ecc71';
+
+            if (randomScore < 30) {
+                privacyLevel = 'Poor';
+                color = '#e74c3c';
+            } else if (randomScore < 70) {
+                privacyLevel = 'Fair';
+                color = '#f39c12';
+            }
+
+            resultDiv.innerHTML = `
+                <p><strong>Username:</strong> ${username}</p>
+                <p><strong>Privacy Score:</strong> <span style="color: ${color}">${randomScore}/100 (${privacyLevel})</span></p>
+                <p><strong>Recommendations:</strong> Review your social media privacy settings.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+"""
+
+display(HTML(html_content))
