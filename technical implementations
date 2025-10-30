@@ -1,1 +1,32 @@
+# Digital Safety Platform
 
+A modern web application for detecting online harassment and analyzing privacy settings.
+
+# Technical Stack
+
+Frontend: HTML5, CSS3, JavaScript (ES6+)
+Layout: CSS Grid & Flexbox for responsive design
+Icons: Font Awesome
+Styling: Custom CSS with gradients and animations
+
+# Core Features
+
+- Harassment Detection - Text analysis using pattern matching
+- Privacy Checker - Simulated privacy scoring system
+- Statistics Dashboard - Data visualization with interactive charts
+- Responsive Design - Mobile-first approach for all devices
+- User-Friendly UI - Clean navigation and intuitive interface
+
+# Implementation Details
+
+- Pattern Matching - Keyword-based content analysis
+- Privacy Scoring - Rule-based evaluation system
+- Responsive Components - Adaptive UI layouts
+
+# Getting Started
+
+1. Enter text in harassment detector for content analysis
+2. Complete privacy questionnaire for security recommendations
+3. View statistics dashboard for safety insights
+
+Built with modern web standards and focus on user experience.
